@@ -25,19 +25,23 @@ class PreambleParser {
 		to ourselves and our Posterity, do ordain and establish
 		this Constitution for the United States of America.
 	";
-	private $_beginsWith = FALSE;
-	private $_beginsWithCount = 0;
-	private $_endsWith = FALSE;
-	private $_endsWithCount = 0;
-	private $_beginsWithandEndsWithCount = 0;
+	private $_beginsWith = FALSE;               // a flag to track if it begins with the specified letter
+	private $_beginsWithCount = 0;              // a count for the number of times a word begins with that letter
 
-	private $_beginsWithChar = 't';
-	private $_endsWithChar = 'e';
+	private $_endsWith = FALSE;                 // a flag to track if a word ends with the specified letter
+	private $_endsWithCount = 0;                // a count for the number of times a word ends with a certain letter
 
-	private $_textToParseWords = [];
+	private $_beginsWithandEndsWithCount = 0;   // a count for when the word begins with and ends with specified letters
+
+	private $_beginsWithChar = 't';             // the begins with character we're looking for
+	private $_endsWithChar = 'e';               // the ends with character we're looking for
+
+	private $_textToParseWords = [];            // an array to hold the individual words from the main string
 
 	/**
 	 * PreambleParser constructor.
+	 *
+	 *  default constructor, no arguments
 	 */
 	function __construct() {
 		// do nothing, use the internal properties as they exist predefined.
@@ -45,6 +49,8 @@ class PreambleParser {
 
 	/**
 	 * PreambleParser constructor.
+	 *
+	 *  secondary constructor, with parameters
 	 *
 	 * @param string $textToParse
 	 * @param string $beginsWithChar
@@ -64,6 +70,9 @@ class PreambleParser {
 	/**
 	 * parsePreamble
 	 *
+	 *  this method parses the text into individual words,
+	 *  loops through the returned array of words and checks for beginning and ending characters,
+	 *  then increments the proper counting variables
 	 *
 	 */
 	public function parsePreamble() {
@@ -84,8 +93,8 @@ class PreambleParser {
 		foreach($this->_textToParseWords as $word) {
 
 			// does is start with the defined character?
-			if ($word[0] == $this->_beginsWithChar) {
-
+			if ($word[0] == $this->_beginsWithChar) {               // in php you can still treat a string like a character array
+																	// also, fun fact, == checks for upper and lowercase
 				// if so , increment the count and set a flag
 				$this->_beginsWith = TRUE;
 				++$this->_beginsWithCount;
@@ -96,7 +105,7 @@ class PreambleParser {
 			}
 
 			// does it end with the defined character?
-			if ($word[strlen($word)-1] == $this->_endsWithChar) {
+			if ($word[strlen($word)-1] == $this->_endsWithChar) {   // checking the last element of the character array
 
 				// if so , increment the count and set a flag
 				$this->_endsWith = TRUE;
@@ -109,7 +118,8 @@ class PreambleParser {
 
 			// does it start with one and end with the other?
 			if ($this->_beginsWith && $this->_endsWith) {
-				// if yes, then increment the count
+
+				// if so, then increment the count
 				++$this->_beginsWithandEndsWithCount;
 			}
 
@@ -119,14 +129,22 @@ class PreambleParser {
 
 	}
 
+	/**
+	 * printResults
+	 *
+	 *  prints out user readable results
+	 *
+	 */
 	private function printResults() {
 
+		printf("Preamble Parser 2000<br/><br/>");
+
 		// display results to the user
-		printf("Text to parse : <br />");
-		printf($this->_textToParse."<br />");
-		printf( "Number of words that begin with %s : %u <br />", $this->_beginsWithChar, $this->_beginsWithCount);
-		printf( "Number of words that end with %s : %u <br />", $this->_endsWithChar, $this->_endsWithCount);
-		printf("Number of words that begin with %s and end with %s : %u <br />", $this->_beginsWithChar, $this->_endsWithChar, $this->_beginsWithandEndsWithCount);
+		printf("Text to parse : <br/><br/>");
+		printf($this->_textToParse."<br/><br/>");
+		printf( "Number of words that begin with '%s' : <b>%u</b> <br/><br/>", $this->_beginsWithChar, $this->_beginsWithCount);
+		printf( "Number of words that end with '%s' : <b>%u</b> <br/><br/>", $this->_endsWithChar, $this->_endsWithCount);
+		printf("Number of words that begin with '%s' and end with '%s' : <b>%u</b> <br/>", $this->_beginsWithChar, $this->_endsWithChar, $this->_beginsWithandEndsWithCount);
 
 	}
 
